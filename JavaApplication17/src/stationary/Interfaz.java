@@ -2,17 +2,22 @@ package stationary;
 
 import java.sql.*;
 import java.math.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Rafael_jz
  */
 public class Interfaz extends javax.swing.JFrame {
-    
+
     static Connection conn;
     static Statement sentencia;
     static ResultSet resultado;
-    
+
     /**
      * Creates new form Interfaz
      */
@@ -46,11 +51,12 @@ public class Interfaz extends javax.swing.JFrame {
         precio = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        precio1 = new javax.swing.JTextField();
+        id_registro = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        precio2 = new javax.swing.JTextField();
+        cant_registro = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         registrar = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
 
         jLabel6.setText("Cantidad del producto:");
 
@@ -94,6 +100,12 @@ public class Interfaz extends javax.swing.JFrame {
 
         jLabel8.setText("REGISTRO:");
 
+        id_registro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                id_registroActionPerformed(evt);
+            }
+        });
+
         jLabel9.setText("ID del producto:");
 
         jLabel10.setText("Cantidad:");
@@ -104,6 +116,8 @@ public class Interfaz extends javax.swing.JFrame {
                 registrarActionPerformed(evt);
             }
         });
+
+        jLabel11.setText("<-- presionar una sola vez !");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -129,11 +143,14 @@ public class Interfaz extends javax.swing.JFrame {
                     .addComponent(precio, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9)
-                    .addComponent(precio1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(id_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(precio2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(registrar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                    .addComponent(cant_registro, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(registrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel11)))
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -172,13 +189,15 @@ public class Interfaz extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(precio1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(id_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(precio2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cant_registro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(registrar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(registrar)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(98, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(4, 4, 4)
@@ -200,71 +219,103 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarActionPerformed
-      
-        if((nom_prod.getText() != "") && (Integer.parseInt(precio.getText()) != 0)){
+
+        if ((nom_prod.getText() != "") && (Integer.parseInt(precio.getText()) != 0)) {
             results.setText(insertar(nom_prod.getText(), Integer.parseInt(cant.getText()), Integer.parseInt(precio.getText())));
-        }else{
+        } else {
             results.setText("Los datos ingresados son invalidos");
         }
-        
+        JOptionPane.showMessageDialog(null, "El producto: " + nom_prod.getText() + " ha sido insertado con exito","Alerta",JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_insertarActionPerformed
 
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
-        // TODO add your handling code here:
+        results.append(registrar(Integer.parseInt(id_registro.getText()), Integer.parseInt(cant_registro.getText())));
+        JOptionPane.showMessageDialog(null, "El producto con id: " + id_registro.getText() + " ha sido registrado con exito","Alerta",JOptionPane.WARNING_MESSAGE);
     }//GEN-LAST:event_registrarActionPerformed
-    
-    public static String buscar(String st){
-        
+
+    private void id_registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_id_registroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_id_registroActionPerformed
+
+    public static String buscar(String st) {
+
         String salida = "";
-        
+
         try {
             System.out.println("Buscando...");
-            resultado = sentencia.executeQuery("SELECT * FROM stationery WHERE pr_name LIKE '%" + st +  "%'");
-           
+            resultado = sentencia.executeQuery("SELECT * FROM stationery WHERE pr_name LIKE '%" + st + "%'");
+
             // Se recorren las tuplas retornadas
-            while(resultado.next()){
+            while (resultado.next()) {
                 salida = salida + "\n" + (resultado.getInt("id") + " --- " + resultado.getString("pr_name") + " --- " + resultado.getInt("inventory") + " --- " + resultado.getInt("unit_price"));
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
-        System.out.println("Consulta finalizada.");
-        return salida;       
+        return salida;
     }
-    
-    public static int conteo(){
-        
+
+    public static int conteo() {
+
         int cont = 0;
-        
+
         try {
             System.out.println("Contando...");
             resultado = sentencia.executeQuery("SELECT COUNT(*) AS count FROM stationery");
-            
-            if(resultado.next()){
+
+            if (resultado.next()) {
                 cont = resultado.getInt("count");
-            }         
-        }catch(SQLException e){
+            }
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
         return cont;
     }
-    
-    public static String insertar(String prod, int cant, int price){
-        
-        int count = conteo() + 1; 
+
+    public static String insertar(String prod, int cant, int price) {
+
+        int count = conteo() + 1;
         String salida = "No se pudo insertar";
-        
+
         try {
             System.out.println("Insertando...");
             String sqlstmt = "INSERT INTO stationery VALUES (" + count + ",'" + prod + "'," + cant + "," + price + ")";
             sentencia.executeUpdate(sqlstmt);
             salida = "El producto: " + prod + " ha sido insertad@ con exito";
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return salida;
     }
-    
+
+    public static String registrar(int ID_reg, int cant_reg) {
+
+        int new_cant;
+        int precio_reg;
+        String SQLstmt;
+        String prod = "";
+
+        try {
+            System.out.println("Buscando...");
+            resultado = sentencia.executeQuery("SELECT * FROM stationery WHERE id = " + ID_reg);
+            while(resultado.next()){
+                prod = resultado.getString("pr_name");
+            if (resultado.getInt("inventory") - cant_reg > 0) {
+                new_cant = resultado.getInt("inventory") - cant_reg;
+                precio_reg = cant_reg * resultado.getInt("unit_price");
+                SQLstmt = "UPDATE stationery SET id = " + resultado.getInt("id") + ", pr_name = '" + prod + "', inventory = " + new_cant + ", unit_price = " + resultado.getInt("unit_price") + " WHERE id = " + ID_reg;
+                sentencia.execute(SQLstmt);
+                System.out.println("Producto registrado con exito");
+            }else{
+                System.out.println("No se puede registrar la compra pq el pedido supera las unidades en el inventario");
+            }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return "El producto: " + prod + " ha sido registrado con exito\n";
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -296,10 +347,13 @@ public class Interfaz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField busqueda;
     private javax.swing.JTextField cant;
+    private javax.swing.JTextField cant_registro;
+    private javax.swing.JTextField id_registro;
     private javax.swing.JButton insertar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -312,8 +366,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextField nom_prod;
     private javax.swing.JTextField nom_prod2;
     private javax.swing.JTextField precio;
-    private javax.swing.JTextField precio1;
-    private javax.swing.JTextField precio2;
     private javax.swing.JButton registrar;
     private javax.swing.JTextArea results;
     // End of variables declaration//GEN-END:variables
