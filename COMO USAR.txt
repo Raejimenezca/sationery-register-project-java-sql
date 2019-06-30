@@ -1,0 +1,18 @@
+COMO USAR:
+
+- Seccion BUSCADOR:
+
+En esta seccion se puede hacer busquedas por el nombre o parte del nombre del producto.
+
+- Seccion INSERCIONES:
+
+Esta seccion esta destinada para agregar productos a la base de datos, NO manipular sin autorizacion del administrador.
+
+- Seccion REGISTRO:
+
+En esta seccion se registraran las ventas, para ello despues de hacer una busqueda en la seccion 'BUSCADOR', en el campo de texto de la derecha se podra visualizar el 'ID' del producto el cual se requiere para la ejecucion del regitro, en el campo 'Cantidad' se pondran las unidades del producto que se vendieron.
+
+En caso de que el producto no se encuentre en la base de datos, hacer el registro por nombre, para lo cual SE DEBE dejar el campo 'Por ID' vacio, es decir, solo llenar los campos: 'Por nombre', 'Cantidad', 'Precio unitario'.
+
+NOTA:
+recordar que para hacer el registro solo se debe presionar una sola vez el botón, ya que si se presiona más de una vez se hará el descuento de los elementos en la base de datos.
